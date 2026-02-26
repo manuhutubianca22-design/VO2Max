@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VO₂max — Cooper Test & Analisis</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #0f1525;
+    --bg3: #151d35;
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --accent4: #f59e0b;
+    --danger: #ef4444;
+    --text: #e2e8f0;
+    --text-dim: #64748b;
+    --border: rgba(0,229,255,0.12);
+    --card: rgba(15,21,37,0.8);
+    --glow: 0 0 40px rgba(0,229,255,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* BG GRID */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,14,26,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    height: 56px;
+    overflow-x: auto;
+  }
+
+  nav .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent);
+    white-space: nowrap;
+    letter-spacing: -0.5px;
+  }
+
+  nav .logo span { color: var(--text); }
+
+  nav a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  nav a:hover, nav a.active {
+    color: var(--accent);
+    background: rgba(0,229,255,0.08);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 2rem 4rem;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 .cyan { color: var(--accent); }
+  .hero h1 .purple { color: #a78bfa; }
+
+  .hero p {
+    font-size: 1.05rem;
+    color: var(--text-dim);
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    font-weight: 300;
+  }
+
+  /* GLOW ORBS */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .orb1 {
+    width: 500px; height: 500px;
+    background: rgba(0,229,255,0.06);
+    top: -200px; right: -100px;
+  }
+
+  .orb2 {
+    width: 400px; height: 400px;
+    background: rgba(124,58,237,0.07);
+    bottom: 200px; left: -100px;
+  }
+
+  /* SECTIONS */
+  section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    background: rgba(0,229,255,0.08);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 2px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .card:hover {
+    border-color: rgba(0,229,255,0.25);
+    box-shadow: var(--glow);
+  }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+
+  @media (max-width: 700px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* CONCEPT CARDS */
+  .concept-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .concept-card .icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .concept-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent);
+  }
+
+  .concept-card p {
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    line-height: 1.65;
+  }
+
+  /* VO2 CLASSIFICATION TABLE */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  thead {
+    background: rgba(0,229,255,0.06);
+  }
+
+  thead th {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(0,229,255,0.05);
+    transition: background 0.2s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(0,229,255,0.04); }
+
+  td {
+    padding: 11px 16px;
+    color: var(--text-dim);
+  }
+
+  td:first-child { color: var(--text); font-weight: 500; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .badge-red { background: rgba(239,68,68,0.15); color: #f87171; }
+  .badge-orange { background: rgba(245,158,11,0.15); color: #fbbf24; }
+  .badge-yellow { background: rgba(234,179,8,0.15); color: #facc15; }
+  .badge-blue { background: rgba(59,130,246,0.15); color: #60a5fa; }
+  .badge-cyan { background: rgba(0,229,255,0.12); color: #22d3ee; }
+  .badge-green { background: rgba(16,185,129,0.15); color: #34d399; }
+  .badge-emerald { background: rgba(5,150,105,0.15); color: #10b981; }
+
+  /* FORMULA */
+  .formula-box {
+    background: rgba(0,229,255,0.04);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 1.1rem;
+    text-align: center;
+    margin: 1rem 0;
+    letter-spacing: 0.5px;
+  }
+
+  .formula-box .var { color: var(--accent); }
+  .formula-box .val { color: #a78bfa; }
+
+  .formula-desc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .formula-var {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+  }
+
+  .formula-var .sym {
+    font-family: 'DM Mono', monospace;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* CALCULATOR */
+  .calc-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .calc-header {
+    background: rgba(0,229,255,0.06);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .calc-body {
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 700px) { .calc-body { grid-template-columns: 1fr; } }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .form-group label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .form-group input, .form-group select {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .form-group input:focus, .form-group select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,229,255,0.1);
+  }
+
+  .form-group select option { background: var(--bg2); }
+
+  .btn-calc {
+    grid-column: 1/-1;
+    background: linear-gradient(135deg, rgba(0,229,255,0.15), rgba(124,58,237,0.15));
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 12px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-calc:hover {
+    background: linear-gradient(135deg, rgba(0,229,255,0.25), rgba(124,58,237,0.25));
+    box-shadow: 0 0 20px rgba(0,229,255,0.2);
+  }
+
+  .calc-result {
+    grid-column: 1/-1;
+    background: rgba(0,229,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: none;
+  }
+
+  .calc-result.show { display: block; }
+
+  .result-vo2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .result-unit {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+  }
+
+  .result-class {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .result-bar-wrap {
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    height: 8px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-bar {
+    height: 100%;
+    border-radius: 20px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    transition: width 1s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .result-advice {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-top: 0.75rem;
+  }
+
+  /* SCATTER PLOT */
+  #scatterCanvas {
+    width: 100%;
+    max-width: 700px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* REGRESSION BOX */
+  .reg-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 700px) { .reg-grid { grid-template-columns: 1fr; } }
+
+  .reg-stat {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem;
+    text-align: center;
+  }
+
+  .reg-stat .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .reg-stat .val {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -1px;
+  }
+
+  .reg-stat .sub {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* DATA TABLE */
+  .data-scroll {
+    max-height: 320px;
+    overflow-y: auto;
+  }
+
+  .data-scroll::-webkit-scrollbar { width: 4px; }
+  .data-scroll::-webkit-scrollbar-track { background: transparent; }
+  .data-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* INTERPRETATION */
+  .interp-card {
+    background: rgba(0,229,255,0.04);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.88rem;
+    color: var(--text);
+  }
+
+  .interp-card strong {
+    color: var(--accent3);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    display: block;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* GUIDE STEPS */
+  .step {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0,229,255,0.1);
+    border: 1px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .step-content h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+  }
+
+  .step-content p {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.65;
+  }
+
+  .warning-box {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-top: 1.5rem;
+  }
+
+  .warning-box .icon { font-size: 1.4rem; flex-shrink: 0; }
+  .warning-box p { font-size: 0.85rem; color: #fbbf24; line-height: 1.65; }
+
+  /* DIST TABLE */
+  .dist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .dist-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .dist-card:hover {
+    border-color: var(--accent);
+    background: rgba(0,229,255,0.04);
+  }
+
+  .dist-card .distance {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -1px;
+    margin-bottom: 2px;
+  }
+
+  .dist-card .dist-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .dist-card .dist-val {
+    font-size: 0.82rem;
+    color: var(--text);
+    background: rgba(0,229,255,0.06);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  /* DIVIDER */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 2rem;
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.2); border-radius: 3px; }
+
+  /* CANVAS tooltip */
+  #tooltip {
+    position: fixed;
+    background: rgba(10,14,26,0.95);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text);
+    pointer-events: none;
+    display: none;
+    z-index: 999;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn:hover { color: var(--text); border-color: rgba(0,229,255,0.3); }
+  .tab-btn.active {
+    background: rgba(0,229,255,0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Smooth scroll */
+  html { scroll-behavior: smooth; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate { animation: fadeUp 0.6s ease both; }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div id="tooltip"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">VO₂<span>max</span></div>
+  <a href="#konsep">Konsep Dasar</a>
+  <a href="#klasifikasi">Klasifikasi</a>
+  <a href="#jarak">By Jarak</a>
+  <a href="#formula">Formula</a>
+  <a href="#kalkulator">Kalkulator</a>
+  <a href="#scatter">Scatter Plot</a>
+  <a href="#regresi">Regresi</a>
+  <a href="#panduan">Panduan</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">⚡ Cooper Test Analysis System</div>
+  <h1>
+    <span class="cyan">VO₂</span><span class="purple">max</span><br>
+    Analisis Lengkap
+  </h1>
+  <p>Platform edukasi interaktif untuk memahami kapasitas aerobik maksimal, Cooper Test, dan analisis statistik performa atletik.</p>
+</div>
+
+<!-- 1. KONSEP DASAR -->
+<section id="konsep">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Konsep Dasar VO₂max</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="grid-3" style="margin-bottom:1rem;">
+    <div class="concept-card">
+      <div class="icon">🫁</div>
+      <h3>Definisi</h3>
+      <p>VO₂max adalah volume maksimum oksigen (O₂) yang dapat dikonsumsi oleh otot selama latihan intensitas tinggi, dinyatakan dalam mL·kg⁻¹·min⁻¹.</p>
+    </div>
+    <div class="concept-card">
+      <div class="icon">⚙️</div>
+      <h3>Fisiologi</h3>
+      <p>Dibatasi oleh kemampuan sistem kardiovaskular (jantung, paru-paru, darah) dan kemampuan otot rangka mengekstrak dan menggunakan oksigen.</p>
+    </div>
+    <div class="concept-card">
+      <div class="icon">📊</div>
+      <h3>Signifikansi</h3>
+      <p>Indikator gold standard kebugaran aerobik. Berhubungan kuat dengan daya tahan kardiorespirasi, performa olahraga, dan kesehatan jangka panjang.</p>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="concept-card">
+      <div class="icon">📈</div>
+      <h3>Faktor yang Mempengaruhi</h3>
+      <p>Genetik (±50% varians), usia (turun ~1% per tahun setelah 25), jenis kelamin (pria ~10–15% lebih tinggi), altitude, status latihan, dan komposisi tubuh.</p>
+    </div>
+    <div class="concept-card">
+      <div class="icon">🏃</div>
+      <h3>Cooper Test (12 Menit)</h3>
+      <p>Tes lapangan sederhana tahun 1968 oleh Dr. Kenneth Cooper. Peserta berlari semaksimal mungkin selama 12 menit. Jarak tempuh digunakan untuk estimasi VO₂max.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- 2. KLASIFIKASI VO2MAX -->
+<section id="klasifikasi">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Klasifikasi VO₂max</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(event,'pria')">Pria</button>
+    <button class="tab-btn" onclick="switchTab(event,'wanita')">Wanita</button>
+  </div>
+
+  <div id="tab-pria" class="tab-content active">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Klasifikasi</th>
+            <th>13–19 th</th>
+            <th>20–29 th</th>
+            <th>30–39 th</th>
+            <th>40–49 th</th>
+            <th>50–59 th</th>
+            <th>60+ th</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="badge badge-red">Sangat Kurang</span></td><td>&lt;35.0</td><td>&lt;33.0</td><td>&lt;31.5</td><td>&lt;30.2</td><td>&lt;26.1</td><td>&lt;20.5</td></tr>
+          <tr><td><span class="badge badge-orange">Kurang</span></td><td>35.0–38.3</td><td>33.0–36.4</td><td>31.5–35.4</td><td>30.2–33.5</td><td>26.1–30.9</td><td>20.5–26.0</td></tr>
+          <tr><td><span class="badge badge-yellow">Cukup</span></td><td>38.4–45.1</td><td>36.5–42.4</td><td>35.5–40.9</td><td>33.6–38.9</td><td>31.0–35.7</td><td>26.1–32.2</td></tr>
+          <tr><td><span class="badge badge-blue">Baik</span></td><td>45.2–50.9</td><td>42.5–46.4</td><td>41.0–44.9</td><td>39.0–43.7</td><td>35.8–40.9</td><td>32.3–36.4</td></tr>
+          <tr><td><span class="badge badge-cyan">Baik Sekali</span></td><td>51.0–55.9</td><td>46.5–52.4</td><td>45.0–49.4</td><td>43.8–48.0</td><td>41.0–45.3</td><td>36.5–44.2</td></tr>
+          <tr><td><span class="badge badge-green">Superior</span></td><td>≥56.0</td><td>≥52.5</td><td>≥49.5</td><td>≥48.1</td><td>≥45.4</td><td>≥44.3</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="tab-wanita" class="tab-content">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Klasifikasi</th>
+            <th>13–19 th</th>
+            <th>20–29 th</th>
+            <th>30–39 th</th>
+            <th>40–49 th</th>
+            <th>50–59 th</th>
+            <th>60+ th</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="badge badge-red">Sangat Kurang</span></td><td>&lt;25.0</td><td>&lt;23.6</td><td>&lt;22.8</td><td>&lt;21.0</td><td>&lt;20.2</td><td>&lt;17.5</td></tr>
+          <tr><td><span class="badge badge-orange">Kurang</span></td><td>25.0–30.9</td><td>23.6–28.9</td><td>22.8–26.9</td><td>21.0–24.4</td><td>20.2–22.7</td><td>17.5–20.1</td></tr>
+          <tr><td><span class="badge badge-yellow">Cukup</span></td><td>31.0–34.9</td><td>29.0–32.9</td><td>27.0–31.4</td><td>24.5–28.9</td><td>22.8–26.9</td><td>20.2–24.4</td></tr>
+          <tr><td><span class="badge badge-blue">Baik</span></td><td>35.0–38.9</td><td>33.0–36.9</td><td>31.5–35.6</td><td>29.0–32.8</td><td>27.0–31.4</td><td>24.5–30.2</td></tr>
+          <tr><td><span class="badge badge-cyan">Baik Sekali</span></td><td>39.0–41.9</td><td>37.0–41.0</td><td>35.7–40.0</td><td>32.9–36.9</td><td>31.5–35.7</td><td>30.3–31.4</td></tr>
+          <tr><td><span class="badge badge-green">Superior</span></td><td>≥42.0</td><td>≥41.1</td><td>≥40.1</td><td>≥37.0</td><td>≥35.8</td><td>≥31.5</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p style="font-size:0.78rem;color:var(--text-dim);margin-top:0.75rem;">Sumber: American College of Sports Medicine (ACSM). Nilai dalam mL·kg⁻¹·min⁻¹</p>
+</section>
+
+<hr class="section-divider">
+
+<!-- 3. KLASIFIKASI BERDASARKAN JARAK -->
+<section id="jarak">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Klasifikasi Berdasarkan Jarak Cooper Test</h2>
+    <div class="section-line"></div>
+  </div>
+  <p style="color:var(--text-dim);font-size:0.88rem;margin-bottom:1.5rem;">Kategori jarak tempuh dalam 12 menit untuk kelompok usia 17–25 tahun (umum digunakan pada mahasiswa)</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(event,'dist-pria')">Pria</button>
+    <button class="tab-btn" onclick="switchTab(event,'dist-wanita')">Wanita</button>
+  </div>
+
+  <div id="tab-dist-pria" class="tab-content active">
+    <div class="dist-grid">
+      <div class="dist-card">
+        <div class="distance">&lt;1600</div>
+        <div class="dist-label">meter</div>
+        <span class="badge badge-red">Sangat Kurang</span>
+        <div style="margin-top:6px;font-size:0.78rem;color:var(--text-dim)">VO₂max &lt;28 mL/kg/min</div>
+      </div>
+      <div class="dist-card">
+        <div class="distance">1600–1999</div>
+        <div class="dist-label">meter</div>
+        <span class="badge badge-orange">Kurang</span>
+        <div style="margin-top:6px;font-size:0.78rem;color:var(--text-dim)">28–34 mL/kg/min</div>
+      </div>
+      <div class="dist-card">
+        <div class="distance">2000–2399</div>
+        <div class="dist-label">meter</div>
+        <span class="badge badge-yellow">Cukup</span>
+        <div style="margin-top:6px;font-size:0.78rem;color:var(--text-dim)">34–42 mL/kg/min</div>
+      </div>
+      <div class="dist-card">
+        <div class="distance">2400–2799</div>
+        <div class="dist-label">meter</div>
+        <span class="badge badge-blue">Baik</span>
+        <div style="margin-top:6px;font-size:0.78rem;color:var(--text-dim)">42–52 mL/kg/min</div>
+      </div>
+      <div class="dist-card">
+        <div class="distance">2800–3199</div>
+        <div class="dist-label">meter</div>
+        <span class="badge badge-cyan">Baik Sekali</span>
+        <div style="margin-top:6px;font-size:0.78rem;color:var(--text-dim)">52–60 mL/kg/min</div>
+      </div>
+      <div class="dist-card">
+        <div class="distance">≥3200</div>
+        <div class="dist-label">meter</div>
+        <span class="badge badge-green">Superior</span>
+        <div style="margin-top:6px;font-size:0.78rem;color:var(--text-dim)">≥60 mL/kg/min</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-dist-wanita" class="tab-content">
+    <div class="dist-grid">
+      <div class="dist-card">
+        <div class="distance">&lt;1500</div>
+        <div class="dist-label">meter</div>
+        <span class="badge badge-red">Sangat Kurang</span>
+        <div style="margin-top:6px;font-size:0.78rem;color:var(--text-dim)">VO₂max &lt;25 mL/kg/min</div>
+      </div>
+      <div class="dist-card">
+        <div class="distance">1500–1799</div>
+        <div class="dist-label">meter</div>
+        <span class="badge badge-orange">Kurang</span>
+        <div style="margin-top:6px;font-size:0.78rem;color:var(--text-dim)">25–30 mL/kg/min</div>
+      </div>
+      <div class="dist-card">
+        <div class="distance">1800–2199</div>
+        <div class="dist-label">meter</div>
+        <span class="badge badge-yellow">Cukup</span>
+        <div style="margin-top:6px;font-size:0.78rem;color:var(--text-dim)">30–37 mL/kg/min</div>
+      </div>
+      <div class="dist-card">
+        <div class="distance">2200–2699</div>
+        <div class="dist-label">meter</div>
+        <span class="badge badge-blue">Baik</span>
+        <div style="margin-top:6px;font-size:0.78rem;color:var(--text-dim)">37–45 mL/kg/min</div>
+      </div>
+      <div class="dist-card">
+        <div class="distance">2700–3000</div>
+        <div class="dist-label">meter</div>
+        <span class="badge badge-cyan">Baik Sekali</span>
+        <div style="margin-top:6px;font-size:0.78rem;color:var(--text-dim)">45–50 mL/kg/min</div>
+      </div>
+      <div class="dist-card">
+        <div class="distance">≥3000</div>
+        <div class="dist-label">meter</div>
+        <span class="badge badge-green">Superior</span>
+        <div style="margin-top:6px;font-size:0.78rem;color:var(--text-dim)">≥50 mL/kg/min</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- 4. FORMULA -->
+<section id="formula">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Formula Perhitungan</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem;">
+    <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;font-size:1rem;">Rumus Cooper (1968) — Standar Utama</h3>
+    <div class="formula-box">
+      <span class="var">VO₂max</span> = (<span class="val">jarak (m)</span> − 504.9) ÷ 44.73
+    </div>
+    <div class="formula-desc">
+      <div class="formula-var"><span class="sym">VO₂max</span> = Volume O₂ maksimal (mL·kg⁻¹·min⁻¹)</div>
+      <div class="formula-var"><span class="sym">jarak (m)</span> = Total jarak tempuh dalam 12 menit</div>
+      <div class="formula-var"><span class="sym">504.9</span> = Konstanta intercept</div>
+      <div class="formula-var"><span class="sym">44.73</span> = Konstanta slope (divisor)</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem;">
+    <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;font-size:1rem;">Rumus Alternatif — Versi Meter per Menit</h3>
+    <div class="formula-box">
+      <span class="var">VO₂max</span> = (<span class="val">v</span> − 0.1) × 0.182 + 3.5
+    </div>
+    <div class="formula-desc">
+      <div class="formula-var"><span class="sym">v</span> = Kecepatan rata-rata (m/min) = jarak ÷ 12</div>
+      <div class="formula-var"><span class="sym">Berlaku</span> untuk estimasi cepat dari kecepatan lari</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;font-size:1rem;">Rumus Brouha — Modifikasi</h3>
+    <div class="formula-box">
+      <span class="var">VO₂max</span> = 0.0268 × <span class="val">jarak (m)</span> − 11.3
+    </div>
+    <div class="formula-desc">
+      <div class="formula-var"><span class="sym">Varian</span> kadang digunakan untuk populasi khusus</div>
+      <div class="formula-var"><span class="sym">Catatan</span> = Rumus Cooper lebih umum dipakai di Indonesia</div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- 5. KALKULATOR -->
+<section id="kalkulator">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Kalkulator Interaktif VO₂max</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="calc-wrap">
+    <div class="calc-header">
+      🧮 <span>Cooper Test Calculator</span>
+      <span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--text-dim);margin-left:auto;">mL·kg⁻¹·min⁻¹</span>
+    </div>
+    <div class="calc-body" id="calcBody">
+      <div class="form-group">
+        <label>Nama Peserta</label>
+        <input type="text" id="cname" placeholder="Masukkan nama..." />
+      </div>
+      <div class="form-group">
+        <label>Kelamin</label>
+        <select id="csex">
+          <option value="pria">Pria</option>
+          <option value="wanita">Wanita</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Usia (tahun)</label>
+        <input type="number" id="cage" placeholder="20" min="10" max="80" />
+      </div>
+      <div class="form-group">
+        <label>Jarak Tempuh (meter)</label>
+        <input type="number" id="cdist" placeholder="2400" min="0" max="5000" />
+      </div>
+
+      <button class="btn-calc" onclick="calcVO2()">⚡ HITUNG VO₂MAX</button>
+
+      <div class="calc-result" id="calcResult">
+        <div style="display:flex;gap:2rem;align-items:flex-start;flex-wrap:wrap;">
+          <div>
+            <div class="result-vo2" id="resVO2">—</div>
+            <div class="result-unit">mL · kg⁻¹ · min⁻¹</div>
+            <div class="result-class badge" id="resClass">—</div>
+          </div>
+          <div style="flex:1;min-width:200px;">
+            <div style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--text-dim);margin-bottom:6px;letter-spacing:1px;">POSISI DALAM RANGE NORMAL</div>
+            <div class="result-bar-wrap">
+              <div class="result-bar" id="resBar" style="width:0%"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--text-dim);margin-top:3px;">
+              <span>20</span><span>35</span><span>50</span><span>65</span><span>80+</span>
+            </div>
+          </div>
+        </div>
+        <div class="result-advice" id="resAdvice"></div>
+        <div style="margin-top:1rem;">
+          <a href="#regresi" style="display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--accent);text-decoration:none;background:rgba(0,229,255,0.08);border:1px solid var(--border);padding:6px 14px;border-radius:6px;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,229,255,0.15)'" onmouseout="this.style.background='rgba(0,229,255,0.08)'">
+            📊 Lihat Interpretasi Lengkap di Seksi Regresi →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- 6. SCATTER PLOT -->
+<section id="scatter">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Scatter Plot Data Cooper Test</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div id="scatterStatus" style="background:rgba(0,229,255,0.04);border:1px solid var(--border);border-radius:10px;padding:0.85rem 1.25rem;margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem;font-size:0.84rem;color:var(--text-dim);">
+    <span style="font-size:1.1rem;">📍</span>
+    <span id="scatterStatusText">Menampilkan <strong style="color:var(--text)">30 data sampel</strong>. Gunakan kalkulator untuk menambahkan titik peserta Anda ke plot.</span>
+  </div>
+
+  <div class="card">
+    <canvas id="scatterCanvas" height="420"></canvas>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:center;gap:1.5rem;margin-top:0.5rem;flex-wrap:wrap;">
+    <span style="font-size:0.75rem;color:var(--text-dim);display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:#60a5fa;display:inline-block;"></span> Pria (sampel)</span>
+    <span style="font-size:0.75rem;color:var(--text-dim);display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:#f9a8d4;display:inline-block;"></span> Wanita (sampel)</span>
+    <span id="legendUser" style="font-size:0.75rem;color:#fbbf24;display:none;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#fbbf24;border:2px solid #fff;display:inline-block;"></span> ★ Peserta (Anda)</span>
+    <span style="font-size:0.75rem;color:var(--text-dim);display:flex;align-items:center;gap:5px;"><span style="width:18px;height:2px;background:linear-gradient(90deg,#7c3aed,#00e5ff);display:inline-block;"></span> Garis Regresi</span>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- 7. REGRESI -->
+<section id="regresi">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Regresi Linear & Korelasi</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <!-- Persamaan Regresi -->
+  <div class="card" style="margin-bottom:1rem;">
+    <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;">Persamaan Regresi Linear</h3>
+    <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:0.75rem;">Hubungan antara jarak Cooper Test (X) dan VO₂max (Y) mengikuti persamaan linear:</p>
+    <div class="formula-box" id="regFormula">
+      <span class="var">ŷ</span> = <span class="val" id="regA">—</span> + <span class="val" id="regB">—</span>x
+    </div>
+    <div style="font-size:0.82rem;color:var(--text-dim);margin-top:0.75rem;">
+      dimana <strong style="color:var(--text)">ŷ</strong> = prediksi VO₂max, <strong style="color:var(--text)">x</strong> = jarak tempuh (m), dan a, b adalah koefisien regresi yang dihitung dari data.
+    </div>
+  </div>
+
+  <!-- Statistik -->
+  <div class="reg-grid">
+    <div class="reg-stat">
+      <div class="label">Koefisien Korelasi</div>
+      <div class="val" id="statR">—</div>
+      <div class="sub">r — Pearson</div>
+    </div>
+    <div class="reg-stat">
+      <div class="label">Koef. Determinasi</div>
+      <div class="val" id="statR2">—</div>
+      <div class="sub">R² — Goodness of Fit</div>
+    </div>
+    <div class="reg-stat">
+      <div class="label">Standard Error</div>
+      <div class="val" id="statSE">—</div>
+      <div class="sub">SEE (mL/kg/min)</div>
+    </div>
+  </div>
+
+  <!-- Data Contoh -->
+  <div class="card" style="margin-bottom:1rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
+      <h3 style="font-family:'Syne',sans-serif;font-weight:700;" id="dataTableTitle">Data Sampel (30 Entri)</h3>
+      <span id="userRowBadge" style="display:none;font-family:'DM Mono',monospace;font-size:0.72rem;background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);color:#fbbf24;padding:4px 12px;border-radius:20px;letter-spacing:1px;">★ TERMASUK DATA ANDA</span>
+    </div>
+    <div class="data-scroll">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama</th>
+              <th>Kelamin</th>
+              <th>Usia</th>
+              <th>Jarak (m)</th>
+              <th>VO₂max</th>
+              <th>Prediksi ŷ</th>
+              <th>Residual</th>
+              <th>Klasifikasi</th>
+            </tr>
+          </thead>
+          <tbody id="dataTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interpretasi -->
+  <div class="card">
+    <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;">Interpretasi Hasil</h3>
+
+    <!-- Empty state -->
+    <div id="interpEmpty" style="background:rgba(0,229,255,0.03);border:1px dashed rgba(0,229,255,0.18);border-radius:10px;padding:2rem;text-align:center;margin-bottom:1rem;">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">🔢</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--text-dim);letter-spacing:1px;">BELUM ADA DATA</div>
+      <div style="font-size:0.85rem;color:var(--text-dim);margin-top:6px;">Interpretasi akan muncul otomatis setelah Anda menggunakan <a href="#kalkulator" style="color:var(--accent);text-decoration:none;">Kalkulator Interaktif</a> di atas.</div>
+    </div>
+
+    <!-- Dynamic interpretation (hidden until calc used) -->
+    <div id="interpDynamic" style="display:none;">
+
+      <!-- Summary header -->
+      <div style="background:rgba(0,229,255,0.05);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:1rem;display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;">
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--text-dim);letter-spacing:1px;margin-bottom:2px;">PESERTA</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;" id="iName">—</div>
+        </div>
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--text-dim);letter-spacing:1px;margin-bottom:2px;">JARAK TEMPUH</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:var(--accent);" id="iDist">—</div>
+        </div>
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--text-dim);letter-spacing:1px;margin-bottom:2px;">VO₂MAX AKTUAL</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:var(--accent);" id="iVO2">—</div>
+        </div>
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--text-dim);letter-spacing:1px;margin-bottom:2px;">PREDIKSI REGRESI (ŷ)</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:#a78bfa;" id="iPred">—</div>
+        </div>
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--text-dim);letter-spacing:1px;margin-bottom:2px;">RESIDUAL</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;" id="iResidual">—</div>
+        </div>
+        <div style="margin-left:auto;">
+          <span class="badge" id="iCatBadge" style="font-size:0.9rem;padding:6px 16px;">—</span>
+        </div>
+      </div>
+
+      <div class="interp-card" id="iCard1">
+        <strong id="iTitle1">VO₂max & Klasifikasi</strong>
+        <span id="iText1">—</span>
+      </div>
+
+      <div class="interp-card" style="border-left-color: var(--accent);" id="iCard2">
+        <strong id="iTitle2">Posisi Terhadap Regresi</strong>
+        <span id="iText2">—</span>
+      </div>
+
+      <div class="interp-card" style="border-left-color: var(--accent4);" id="iCard3">
+        <strong id="iTitle3">Makna Koefisien Korelasi (r)</strong>
+        <span id="iText3">—</span>
+      </div>
+
+      <div class="interp-card" style="border-left-color: #a78bfa;" id="iCard4">
+        <strong id="iTitle4">Makna R² untuk Data Ini</strong>
+        <span id="iText4">—</span>
+      </div>
+
+      <div class="interp-card" style="border-left-color: var(--accent3);" id="iCard5">
+        <strong id="iTitle5">Target Peningkatan</strong>
+        <span id="iText5">—</span>
+      </div>
+
+    </div><!-- end interpDynamic -->
+
+    <div style="margin-top:1rem;">
+      <h4 style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;margin-bottom:0.75rem;color:var(--text-dim);">Tabel Interpretasi Koefisien Korelasi</h4>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Nilai |r|</th><th>Interpretasi</th><th>Contoh Konteks</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>0.00 – 0.19</td><td><span class="badge badge-red">Sangat Lemah</span></td><td>Hampir tidak ada hubungan</td></tr>
+            <tr><td>0.20 – 0.39</td><td><span class="badge badge-orange">Lemah</span></td><td>Hubungan kecil, banyak faktor lain</td></tr>
+            <tr><td>0.40 – 0.59</td><td><span class="badge badge-yellow">Sedang</span></td><td>Hubungan moderat, perlu dikombinasi</td></tr>
+            <tr><td>0.60 – 0.79</td><td><span class="badge badge-blue">Kuat</span></td><td>Cooper Test cukup valid</td></tr>
+            <tr><td>0.80 – 1.00</td><td><span class="badge badge-green">Sangat Kuat</span></td><td>Prediksi VO₂max sangat akurat</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- 8. PANDUAN PELAKSANAAN -->
+<section id="panduan">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Panduan Pelaksanaan Cooper Test</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem;">
+    <div class="card">
+      <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1rem;color:var(--accent);">🏟️ Persiapan Lapangan</h3>
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h4>Lintasan Standar</h4>
+          <p>Gunakan lintasan atletik 400m atau area yang telah diukur dengan tepat. Tandai setiap 100m untuk memudahkan pencatatan.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h4>Kondisi Cuaca</h4>
+          <p>Lakukan pada suhu 15–25°C, kelembaban &lt;75%. Hindari cuaca panas ekstrem, hujan, atau angin kencang (&gt;5 m/s).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h4>Peralatan</h4>
+          <p>Siapkan: stopwatch, peluit, formulir pencatatan, cone/marker setiap 100m, dan petugas pencatat per peserta.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1rem;color:var(--accent3);">👤 Persiapan Peserta</h3>
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h4>Kondisi Fisik</h4>
+          <p>Peserta harus sehat, tidak sakit/cedera. Istirahat cukup 1–2 hari sebelum tes. Tidak berolahraga berat 24 jam sebelumnya.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h4>Konsumsi</h4>
+          <p>Makan 2–3 jam sebelum tes. Tidak mengonsumsi kafein atau suplemen. Minum cukup air (200–400 mL, 30 menit sebelum tes).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h4>Pakaian</h4>
+          <p>Sepatu lari yang nyaman, pakaian olahraga yang sesuai. Hindari pakaian terlalu berat atau ketat yang menghambat gerakan.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.5rem;">
+    <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1.25rem;">📋 Prosedur Pelaksanaan</h3>
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-content">
+        <h4>Warm-Up (10 Menit)</h4>
+        <p>Lakukan pemanasan ringan: jogging 5 menit, stretching dinamis, dan beberapa strides. Warm-up meningkatkan performa dan mengurangi risiko cedera.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-content">
+        <h4>Briefing Peserta</h4>
+        <p>Jelaskan tujuan tes, prosedur, dan strategi pace. Sarankan untuk tidak sprint di awal — mulai dengan pace yang dapat dipertahankan selama 12 menit.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-content">
+        <h4>Pelaksanaan (12 Menit)</h4>
+        <p>Peserta berlari semaksimal mungkin selama tepat 12 menit. Pengetes memberi tanda waktu tiap 1 menit. Di menit ke-11 dan ke-12, dorong peserta untuk berlari sekuat tenaga.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-content">
+        <h4>Pencatatan Jarak</h4>
+        <p>Saat pluit berbunyi di menit ke-12, peserta berdiri di tempat. Petugas mencatat jarak total yang ditempuh dalam meter. Ukur dari titik start ke posisi peserta berhenti.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">05</div>
+      <div class="step-content">
+        <h4>Cool-Down (10 Menit)</h4>
+        <p>Wajib lakukan pendinginan berupa jalan kaki dan stretching statis. Jangan membiarkan peserta langsung duduk atau berbaring setelah tes selesai.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">06</div>
+      <div class="step-content">
+        <h4>Analisis & Feedback</h4>
+        <p>Hitung VO₂max menggunakan rumus Cooper, tentukan klasifikasi, dan berikan feedback individual. Dokumentasikan hasil untuk pemantauan progres.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <div class="icon">⚠️</div>
+    <p><strong>Kontraindikasi & Keamanan:</strong> Hentikan tes jika peserta menunjukkan tanda-tanda: nyeri dada, pusing berat, sesak napas ekstrem, mual/muntah, atau nyeri sendi akut. Selalu sediakan petugas medis/P3K di lokasi. Peserta dengan riwayat penyakit jantung, hipertensi tidak terkontrol, atau kondisi medis khusus harus mendapat clearance dari dokter sebelum mengikuti tes.</p>
+  </div>
+</section>
+
+<footer>
+  <div>VO₂max Analysis System &nbsp;·&nbsp; Cooper Test Edition</div>
+  <div style="margin-top:4px;font-size:0.65rem;">Referensi: Cooper (1968), ACSM Guidelines, Astrand & Rodahl</div>
+</footer>
+
+<script>
+// ============================================================
+// DATA & STATE
+// ============================================================
+// vo2 = hasil pengukuran VO2max laboratorium/field test aktual (mL/kg/min)
+// dist = jarak Cooper Test (m)
+// Keduanya adalah variabel TERUKUR TERPISAH — itulah mengapa ada scatter/residual
+const baseSampleData = [
+  {name:'Ahmad F.',  sex:'pria',  age:20, dist:2450, vo2:43.2},
+  {name:'Budi S.',   sex:'pria',  age:21, dist:2700, vo2:49.8},
+  {name:'Cahyo W.',  sex:'pria',  age:22, dist:2200, vo2:37.4},
+  {name:'Deni R.',   sex:'pria',  age:19, dist:2900, vo2:56.1},
+  {name:'Eko P.',    sex:'pria',  age:23, dist:2100, vo2:35.6},
+  {name:'Fajar N.',  sex:'pria',  age:20, dist:3100, vo2:61.3},
+  {name:'Galang M.', sex:'pria',  age:21, dist:2350, vo2:40.8},
+  {name:'Hadi K.',   sex:'pria',  age:22, dist:2600, vo2:46.5},
+  {name:'Ivan L.',   sex:'pria',  age:20, dist:1950, vo2:31.2},
+  {name:'Joko T.',   sex:'pria',  age:23, dist:2800, vo2:52.4},
+  {name:'Kevin A.',  sex:'pria',  age:21, dist:2500, vo2:45.1},
+  {name:'Lutfi B.',  sex:'pria',  age:19, dist:2050, vo2:33.9},
+  {name:'Mario C.',  sex:'pria',  age:22, dist:3000, vo2:57.6},
+  {name:'Nando P.',  sex:'pria',  age:20, dist:2250, vo2:39.2},
+  {name:'Oscar R.',  sex:'pria',  age:21, dist:2650, vo2:47.8},
+  {name:'Putri A.',  sex:'wanita',age:20, dist:1850, vo2:28.3},
+  {name:'Qori B.',   sex:'wanita',age:21, dist:2100, vo2:36.7},
+  {name:'Rina C.',   sex:'wanita',age:22, dist:1700, vo2:24.9},
+  {name:'Sari D.',   sex:'wanita',age:20, dist:2300, vo2:40.5},
+  {name:'Tina E.',   sex:'wanita',age:19, dist:1600, vo2:22.1},
+  {name:'Umi F.',    sex:'wanita',age:23, dist:2450, vo2:43.6},
+  {name:'Vera G.',   sex:'wanita',age:21, dist:1950, vo2:31.8},
+  {name:'Winda H.',  sex:'wanita',age:22, dist:2200, vo2:38.4},
+  {name:'Xena I.',   sex:'wanita',age:20, dist:1750, vo2:26.5},
+  {name:'Yuni J.',   sex:'wanita',age:21, dist:2000, vo2:33.1},
+  {name:'Zara K.',   sex:'wanita',age:20, dist:2350, vo2:41.9},
+  {name:'Ayu L.',    sex:'wanita',age:22, dist:1900, vo2:29.7},
+  {name:'Bella M.',  sex:'wanita',age:19, dist:2150, vo2:35.3},
+  {name:'Citra N.',  sex:'wanita',age:21, dist:2400, vo2:44.2},
+  {name:'Dina O.',   sex:'wanita',age:20, dist:1650, vo2:23.4}
+];
+
+// Active dataset (may include user data)
+let activeData = [...baseSampleData];
+let userData = null; // {name, sex, age, dist, vo2}
+
+// ============================================================
+// CORE FUNCTIONS
+// ============================================================
+// Cooper formula: estimasi VO2max dari jarak (untuk kalkulator peserta)
+function getVO2Cooper(dist) {
+  return +((dist - 504.9) / 44.73).toFixed(1);
+}
+
+// Alias untuk tampilan tabel sampel (menggunakan vo2 terukur)
+function getVO2(d) {
+  return d.vo2;
+}
+
+function getCategory(vo2, sex) {
+  const cats = [
+    {name:'Sangat Kurang',badge:'badge-red'},
+    {name:'Kurang',badge:'badge-orange'},
+    {name:'Cukup',badge:'badge-yellow'},
+    {name:'Baik',badge:'badge-blue'},
+    {name:'Baik Sekali',badge:'badge-cyan'},
+    {name:'Superior',badge:'badge-green'}
+  ];
+  const thr_pria   = [33,36.5,42.5,46.5,52.5];
+  const thr_wanita = [23.6,29,33,37,41];
+  const thr = sex === 'pria' ? thr_pria : thr_wanita;
+  let idx = 0;
+  for(let t of thr){ if(vo2 >= t) idx++; }
+  return cats[idx];
+}
+
+// Regresi antara dist (X) dan vo2 terukur (Y)
+function computeRegression(data) {
+  const n = data.length;
+  const xs = data.map(d => d.dist);
+  const ys = data.map(d => d.vo2);
+  const sumX  = xs.reduce((a,b)=>a+b,0);
+  const sumY  = ys.reduce((a,b)=>a+b,0);
+  const sumXY = xs.reduce((a,x,i)=>a+x*ys[i],0);
+  const sumX2 = xs.reduce((a,x)=>a+x*x,0);
+  const meanX = sumX/n, meanY = sumY/n;
+  const b = (sumXY - n*meanX*meanY) / (sumX2 - n*meanX*meanX);
+  const a = meanY - b*meanX;
+  const ssRes = ys.reduce((s,y,i)=>s+Math.pow(y-(a+b*xs[i]),2),0);
+  const ssTot = ys.reduce((s,y)=>s+Math.pow(y-meanY,2),0);
+  const r2 = ssTot === 0 ? 1 : Math.max(0, 1 - ssRes/ssTot);
+  const r  = Math.sqrt(r2) * (b >= 0 ? 1 : -1);
+  const se = Math.sqrt(ssRes / Math.max(1, n-2));
+  return {a, b, r, r2, se, n};
+}
+
+// ============================================================
+// SCATTER PLOT
+// ============================================================
+function drawScatter() {
+  const canvas = document.getElementById('scatterCanvas');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const W = Math.min(rect.width - 48, 700);
+  const H = 420;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const reg = computeRegression(activeData);
+  const pad = {l:62,r:36,t:30,b:52};
+  const pw = W - pad.l - pad.r;
+  const ph = H - pad.t - pad.b;
+
+  // Dynamic axis range based on data
+  const allDist = activeData.map(d=>d.dist);
+  const allVO2  = activeData.map(d=>d.vo2);
+  const minX = Math.max(1200, Math.min(...allDist) - 200);
+  const maxX = Math.min(3800, Math.max(...allDist) + 200);
+  const minY = Math.max(14,   Math.min(...allVO2)  - 4);
+  const maxY = Math.min(72,   Math.max(...allVO2)  + 4);
+
+  const toCanvasX = x => pad.l + (x - minX) / (maxX - minX) * pw;
+  const toCanvasY = y => H - pad.b - (y - minY) / (maxY - minY) * ph;
+
+  // Clear
+  ctx.clearRect(0,0,W,H);
+
+  // Grid
+  ctx.strokeStyle = 'rgba(0,229,255,0.05)';
+  ctx.lineWidth = 1;
+  const xStep = Math.ceil((maxX - minX) / 6 / 100) * 100;
+  for(let gx = Math.ceil(minX/xStep)*xStep; gx <= maxX; gx += xStep){
+    const x = toCanvasX(gx);
+    ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, H-pad.b); ctx.stroke();
+  }
+  const yStep = 5;
+  for(let gy = Math.ceil(minY/yStep)*yStep; gy <= maxY; gy += yStep){
+    const y = toCanvasY(gy);
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W-pad.r, y); ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = 'rgba(0,229,255,0.25)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(pad.l,pad.t); ctx.lineTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
+
+  // Tick labels X
+  ctx.fillStyle = 'rgba(100,116,139,0.9)';
+  ctx.font = `400 10px 'DM Mono', monospace`;
+  ctx.textAlign = 'center';
+  for(let gx = Math.ceil(minX/xStep)*xStep; gx <= maxX; gx += xStep){
+    ctx.fillText(gx, toCanvasX(gx), H-pad.b+16);
+  }
+  // Tick labels Y
+  ctx.textAlign = 'right';
+  for(let gy = Math.ceil(minY/yStep)*yStep; gy <= maxY; gy += yStep){
+    ctx.fillText(gy, pad.l-8, toCanvasY(gy)+4);
+  }
+
+  // Axis titles
+  ctx.fillStyle = 'rgba(0,229,255,0.65)';
+  ctx.font = `500 11px 'DM Mono', monospace`;
+  ctx.textAlign = 'center';
+  ctx.fillText('Jarak Tempuh (m)', pad.l + pw/2, H-4);
+  ctx.save();
+  ctx.translate(13, pad.t + ph/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText('VO₂max (mL·kg⁻¹·min⁻¹)', 0, 0);
+  ctx.restore();
+
+  // --- Regression line ---
+  const rx1 = minX, rx2 = maxX;
+  const ry1 = reg.a + reg.b * rx1;
+  const ry2 = reg.a + reg.b * rx2;
+  const grad = ctx.createLinearGradient(toCanvasX(rx1),0,toCanvasX(rx2),0);
+  grad.addColorStop(0,'rgba(124,58,237,0.75)');
+  grad.addColorStop(1,'rgba(0,229,255,0.75)');
+  ctx.strokeStyle = grad;
+  ctx.lineWidth = 2;
+  ctx.setLineDash([7,3]);
+  ctx.beginPath();
+  ctx.moveTo(toCanvasX(rx1), toCanvasY(ry1));
+  ctx.lineTo(toCanvasX(rx2), toCanvasY(ry2));
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // --- Residual line for user point ---
+  if(userData) {
+    const uvo2  = userData.vo2;
+    const upred = reg.a + reg.b * userData.dist;
+    const ux = toCanvasX(userData.dist);
+    const uy_actual = toCanvasY(uvo2);
+    const uy_pred   = toCanvasY(upred);
+    ctx.strokeStyle = 'rgba(251,191,36,0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(ux, uy_actual); ctx.lineTo(ux, uy_pred); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // --- Sample data points ---
+  baseSampleData.forEach(d => {
+    const vo2 = d.vo2;
+    const px  = toCanvasX(d.dist);
+    const py  = toCanvasY(vo2);
+    ctx.beginPath();
+    ctx.arc(px, py, 5.5, 0, Math.PI*2);
+    ctx.fillStyle = d.sex === 'pria' ? 'rgba(96,165,250,0.7)' : 'rgba(249,168,212,0.7)';
+    ctx.fill();
+    ctx.strokeStyle = d.sex === 'pria' ? 'rgba(96,165,250,0.95)' : 'rgba(249,168,212,0.95)';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+  });
+
+  // --- User data point (highlighted, animated star) ---
+  if(userData) {
+    const uvo2 = userData.vo2;
+    const ux   = toCanvasX(userData.dist);
+    const uy   = toCanvasY(uvo2);
+
+    // Outer glow ring
+    const grd = ctx.createRadialGradient(ux, uy, 4, ux, uy, 20);
+    grd.addColorStop(0,'rgba(251,191,36,0.35)');
+    grd.addColorStop(1,'rgba(251,191,36,0)');
+    ctx.beginPath();
+    ctx.arc(ux, uy, 20, 0, Math.PI*2);
+    ctx.fillStyle = grd;
+    ctx.fill();
+
+    // Main dot
+    ctx.beginPath();
+    ctx.arc(ux, uy, 9, 0, Math.PI*2);
+    ctx.fillStyle = '#fbbf24';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Star label
+    ctx.fillStyle = '#fbbf24';
+    ctx.font = `bold 11px 'DM Mono', monospace`;
+    ctx.textAlign = 'center';
+    ctx.fillText('★ ' + userData.name, ux, uy - 16);
+  }
+
+  // --- Stats label top-left ---
+  ctx.fillStyle = 'rgba(10,14,26,0.7)';
+  ctx.fillRect(pad.l+6, pad.t+4, 210, 40);
+  ctx.strokeStyle = 'rgba(0,229,255,0.15)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(pad.l+6, pad.t+4, 210, 40);
+  ctx.fillStyle = 'rgba(0,229,255,0.85)';
+  ctx.font = `500 11px 'DM Mono', monospace`;
+  ctx.textAlign = 'left';
+  ctx.fillText(`ŷ = ${reg.a.toFixed(2)} + ${reg.b.toFixed(5)}x`, pad.l+14, pad.t+20);
+  ctx.fillText(`r = ${reg.r.toFixed(3)}   R² = ${reg.r2.toFixed(3)}   n = ${reg.n}`, pad.l+14, pad.t+36);
+}
+
+// ============================================================
+// UPDATE REGRESSION PANEL
+// ============================================================
+function updateRegressionPanel() {
+  const reg = computeRegression(activeData);
+
+  document.getElementById('regA').textContent = reg.a.toFixed(3);
+  document.getElementById('regB').textContent = reg.b.toFixed(5);
+  document.getElementById('statR').textContent = reg.r.toFixed(3);
+  document.getElementById('statR2').textContent = reg.r2.toFixed(3);
+  document.getElementById('statSE').textContent = reg.se.toFixed(2);
+
+  // Rebuild table
+  const tbody = document.getElementById('dataTableBody');
+  tbody.innerHTML = '';
+  activeData.forEach((d, i) => {
+    const vo2  = d.vo2;
+    const pred = +(reg.a + reg.b * d.dist).toFixed(1);
+    const res  = +(vo2 - pred).toFixed(2);
+    const cat  = getCategory(vo2, d.sex);
+    const isUser = userData && d === userData;
+    const tr = document.createElement('tr');
+    if(isUser) {
+      tr.style.cssText = 'background:rgba(251,191,36,0.07);border-left:3px solid #fbbf24;';
+    }
+    tr.innerHTML = `
+      <td>${isUser ? '★' : i+1}</td>
+      <td style="color:${isUser?'#fbbf24':'inherit'};font-weight:${isUser?'600':'400'}">${d.name}${isUser?' (Anda)':''}</td>
+      <td style="color:${d.sex==='pria'?'#60a5fa':'#f9a8d4'}">${d.sex==='pria'?'♂':'♀'} ${d.sex}</td>
+      <td>${d.age}</td>
+      <td style="font-family:'DM Mono',monospace;color:${isUser?'#fbbf24':'inherit'}">${d.dist}</td>
+      <td style="color:var(--accent);font-family:'DM Mono',monospace;font-weight:500">${vo2}</td>
+      <td style="color:#a78bfa;font-family:'DM Mono',monospace">${pred}</td>
+      <td style="color:${res>=0?'#34d399':'#f87171'};font-family:'DM Mono',monospace">${res>=0?'+':''}${res}</td>
+      <td><span class="badge ${cat.badge}">${cat.name}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ============================================================
+// TOOLTIP
+// ============================================================
+const tooltip = document.getElementById('tooltip');
+const canvas = document.getElementById('scatterCanvas');
+
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mx = (e.clientX - rect.left) * (canvas.width / rect.width / (window.devicePixelRatio||1));
+  const my = (e.clientY - rect.top)  * (canvas.height/ rect.height/ (window.devicePixelRatio||1));
+
+  // Re-compute layout params
+  const W = rect.width, H = rect.height;
+  const pad = {l:62,r:36,t:30,b:52};
+  const pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+  const allDist = activeData.map(d=>d.dist);
+  const allVO2  = activeData.map(d=>d.vo2);
+  const minX = Math.max(1200, Math.min(...allDist)-200);
+  const maxX = Math.min(3800, Math.max(...allDist)+200);
+  const minY = Math.max(14, Math.min(...allVO2)-4);
+  const maxY = Math.min(72, Math.max(...allVO2)+4);
+  const toCanvasX = x => pad.l + (x-minX)/(maxX-minX)*pw;
+  const toCanvasY = y => H-pad.b - (y-minY)/(maxY-minY)*ph;
+
+  let found = null;
+  activeData.forEach(d => {
+    const vo2 = d.vo2;
+    const px  = toCanvasX(d.dist);
+    const py  = toCanvasY(vo2);
+    if(Math.hypot(mx-px,my-py) < 14) found = {d, vo2};
+  });
+
+  if(found) {
+    tooltip.style.display = 'block';
+    tooltip.style.left = (e.clientX + 14) + 'px';
+    tooltip.style.top  = (e.clientY - 36) + 'px';
+    const isUser = userData && found.d === userData;
+    tooltip.innerHTML = `${isUser?'★ ':''}${found.d.name} &nbsp;|&nbsp; ${found.d.dist} m &nbsp;→&nbsp; VO₂max: <strong style="color:#00e5ff">${found.vo2}</strong>`;
+  } else {
+    tooltip.style.display = 'none';
+  }
+});
+canvas.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+
+// ============================================================
+// CALCULATOR
+// ============================================================
+function calcVO2() {
+  const distRaw = document.getElementById('cdist').value;
+  const dist = parseFloat(distRaw);
+  const sex  = document.getElementById('csex').value;
+  const age  = parseInt(document.getElementById('cage').value) || 20;
+  const name = document.getElementById('cname').value.trim() || 'Peserta';
+  if(!dist || dist <= 0 || dist > 5000) { alert('Masukkan jarak tempuh yang valid (1–5000 m)!'); return; }
+
+  // VO2max peserta dihitung via rumus Cooper
+  const vo2 = getVO2Cooper(dist);
+  const cat  = getCategory(vo2, sex);
+
+  // ── Update kalkulator result ──
+  document.getElementById('resVO2').textContent = vo2;
+  document.getElementById('resClass').textContent = cat.name;
+  document.getElementById('resClass').className = `result-class badge ${cat.badge}`;
+  const pct = Math.min(Math.max(((vo2 - 14) / 60 * 100), 2), 100);
+  document.getElementById('resBar').style.width = pct + '%';
+  const advices = {
+    'Sangat Kurang':'Segera mulai program latihan aerobik rutin. Targetkan jalan cepat 30 menit/hari, 5x seminggu.',
+    'Kurang':'Tingkatkan intensitas latihan aerobik. Lari ringan 3–4x seminggu selama 30–40 menit sangat disarankan.',
+    'Cukup':'Pertahankan dan tingkatkan. Variasikan latihan dengan interval training untuk mempercepat progres.',
+    'Baik':'Kebugaran aerobik yang baik! Lanjutkan program latihan dan pertimbangkan target lomba jarak menengah.',
+    'Baik Sekali':'Performa aerobik sangat baik. Cocok untuk olahraga kompetitif. Optimalkan dengan periodisasi latihan.',
+    'Superior':'Kapasitas aerobik elite! Pertahankan dengan program latihan berkualitas tinggi dan recovery yang baik.'
+  };
+  document.getElementById('resAdvice').innerHTML = `<span style="color:var(--accent);font-weight:500;">Rekomendasi:</span> ${advices[cat.name]}`;
+  document.getElementById('calcResult').classList.add('show');
+
+  // ── Inject user data into activeData (vo2 = Cooper formula result) ──
+  userData = {name, sex, age, dist, vo2};
+  activeData = [...baseSampleData, userData];
+
+  // ── Recalculate regression with user data included ──
+  const reg = computeRegression(activeData);
+  const pred     = +(reg.a + reg.b * dist).toFixed(1);
+  const residual = +(vo2 - pred).toFixed(2);
+  const r = reg.r, r2 = reg.r2;
+
+  // ── Update scatter plot ──
+  drawScatter();
+
+  // ── Update scatter status text ──
+  document.getElementById('scatterStatusText').innerHTML =
+    `Menampilkan <strong style="color:#fbbf24">31 data</strong> (30 sampel + <strong style="color:#fbbf24">★ ${name}</strong>). Garis regresi & statistik diperbarui otomatis.`;
+  document.getElementById('legendUser').style.display = 'flex';
+
+  // ── Update regression panel (formula, stats, table) ──
+  updateRegressionPanel();
+
+  // ── Update data table title & badge ──
+  document.getElementById('dataTableTitle').textContent = `Data Sampel + Peserta (31 Entri)`;
+  document.getElementById('userRowBadge').style.display = 'inline-block';
+
+  // ── Build interpretation ──
+  const rAbs = Math.abs(r);
+  const rStrength = rAbs >= 0.80 ? 'Sangat Kuat' : rAbs >= 0.60 ? 'Kuat' : rAbs >= 0.40 ? 'Sedang' : rAbs >= 0.20 ? 'Lemah' : 'Sangat Lemah';
+  const rColor    = rAbs >= 0.80 ? '#34d399' : rAbs >= 0.60 ? '#60a5fa' : rAbs >= 0.40 ? '#facc15' : '#fbbf24';
+
+  const catLevels = ['Sangat Kurang','Kurang','Cukup','Baik','Baik Sekali','Superior'];
+  const catIdx = catLevels.indexOf(cat.name);
+  const nextCat = catIdx < 5 ? catLevels[catIdx+1] : null;
+  const nextVO2Targets = {
+    pria:   {'Sangat Kurang':33,'Kurang':36.5,'Cukup':42.5,'Baik':46.5,'Baik Sekali':52.5},
+    wanita: {'Sangat Kurang':23.6,'Kurang':29,'Cukup':33,'Baik':37,'Baik Sekali':41}
+  };
+  let targetText = '';
+  if(nextCat) {
+    const targetVO2  = nextVO2Targets[sex][cat.name];
+    const targetDist = Math.ceil(targetVO2 * 44.73 + 504.9);
+    const deltaDist  = targetDist - dist;
+    const deltaVO2   = +(targetVO2 - vo2).toFixed(1);
+    targetText = `Untuk mencapai kategori <strong style="color:var(--accent3)">${nextCat}</strong>, ${name} perlu meningkatkan VO₂max sebesar <strong style="color:var(--accent)">${deltaVO2 > 0?'+'+deltaVO2:deltaVO2} mL·kg⁻¹·min⁻¹</strong>. Berdasarkan persamaan regresi yang diperbarui (ŷ = ${reg.a.toFixed(2)} + ${reg.b.toFixed(5)}x), ini setara dengan berlari ≈ <strong style="color:var(--accent)">${deltaDist > 0?'+'+deltaDist:deltaDist} meter</strong> lebih jauh (target jarak: ${targetDist} m).`;
+  } else {
+    targetText = `${name} telah mencapai kategori tertinggi (<strong style="color:#34d399">Superior</strong>). Pertahankan performa dengan program latihan periodisasi berkualitas tinggi dan recovery optimal.`;
+  }
+
+  let posText = '';
+  if(Math.abs(residual) < 0.5) {
+    posText = `Nilai VO₂max <strong style="color:#fbbf24">${name}</strong> (${vo2}) berada <strong style="color:var(--accent)">tepat di garis regresi</strong> (prediksi ŷ = ${pred}, residual = ${residual}). Titik ini sesuai dengan pola rata-rata dari ${reg.n} data yang digunakan.`;
+  } else if(residual > 0) {
+    posText = `Nilai VO₂max <strong style="color:#fbbf24">${name}</strong> (${vo2}) berada <strong style="color:#34d399">di atas garis regresi</strong> — prediksi model adalah ${pred}, namun nilai aktual lebih tinggi (residual = <strong style="color:#34d399">+${residual}</strong>). Artinya ${name} memiliki efisiensi aerobik yang lebih baik dari tren rata-rata.`;
+  } else {
+    posText = `Nilai VO₂max <strong style="color:#fbbf24">${name}</strong> (${vo2}) berada <strong style="color:#f87171">di bawah garis regresi</strong> — prediksi model adalah ${pred}, namun nilai aktual lebih rendah (residual = <strong style="color:#f87171">${residual}</strong>). Masih ada ruang optimalisasi efisiensi aerobik.`;
+  }
+
+  // Populate interpretation fields
+  document.getElementById('iName').textContent = name;
+  document.getElementById('iDist').textContent = dist + ' m';
+  document.getElementById('iVO2').textContent  = vo2 + ' mL/kg/min';
+  document.getElementById('iPred').textContent  = pred + ' mL/kg/min';
+  document.getElementById('iResidual').innerHTML = `<span style="color:${residual>=0?'#34d399':'#f87171'}">${residual>=0?'+':''}${residual}</span>`;
+  document.getElementById('iCatBadge').textContent = cat.name;
+  document.getElementById('iCatBadge').className = `badge ${cat.badge}`;
+  document.getElementById('iCatBadge').style.cssText = 'font-size:0.9rem;padding:6px 16px;';
+
+  document.getElementById('iTitle1').textContent = 'VO₂max & Klasifikasi Peserta';
+  document.getElementById('iText1').innerHTML = `Berdasarkan jarak tempuh <strong style="color:var(--accent)">${dist} m</strong> dalam 12 menit, VO₂max ${name} dihitung: VO₂max = (${dist} − 504.9) ÷ 44.73 = <strong style="color:var(--accent)">${vo2} mL·kg⁻¹·min⁻¹</strong>. Nilai ini masuk kategori <span class="badge ${cat.badge}" style="padding:1px 8px;">${cat.name}</span> untuk ${sex} usia ${age} tahun. Titik data peserta telah ditambahkan ke scatter plot dan digunakan dalam perhitungan regresi (n = ${reg.n}).`;
+
+  document.getElementById('iTitle2').textContent = 'Posisi Terhadap Garis Regresi (n='+reg.n+')';
+  document.getElementById('iText2').innerHTML = posText;
+
+  document.getElementById('iTitle3').textContent = `Koefisien Korelasi (r = ${r.toFixed(3)}) — Dataset Diperbarui`;
+  document.getElementById('iText3').innerHTML = `Setelah data ${name} dimasukkan (n = ${reg.n}), koefisien korelasi Pearson menjadi <strong style="color:${rColor}">r = ${r.toFixed(3)}</strong> — kategori <strong style="color:${rColor}">${rStrength}</strong>. Persamaan regresi yang baru: <span style="font-family:'DM Mono',monospace;color:#a78bfa">ŷ = ${reg.a.toFixed(3)} + ${reg.b.toFixed(5)}x</span>. Prediksi untuk ${name}: ŷ = ${pred} mL·kg⁻¹·min⁻¹, selisih residual = ${residual}.`;
+
+  document.getElementById('iTitle4').textContent = `Koefisien Determinasi R² = ${r2.toFixed(3)} (n=${reg.n})`;
+  document.getElementById('iText4').innerHTML = `Dengan data ${name} dimasukkan, R² = <strong style="color:var(--accent)">${r2.toFixed(3)}</strong>, artinya <strong style="color:var(--accent)">${(r2*100).toFixed(1)}%</strong> variasi VO₂max dari ${reg.n} peserta dapat dijelaskan oleh jarak tempuh Cooper Test. SEE (Standard Error of Estimate) = ${reg.se.toFixed(2)} mL·kg⁻¹·min⁻¹ — semakin kecil SEE, semakin akurat prediksi model.`;
+
+  document.getElementById('iTitle5').textContent = 'Target Peningkatan Berbasis Regresi';
+  document.getElementById('iText5').innerHTML = targetText;
+
+  document.getElementById('interpEmpty').style.display = 'none';
+  document.getElementById('interpDynamic').style.display = 'block';
+}
+
+// ============================================================
+// TABS
+// ============================================================
+function switchTab(e, id) {
+  const allBtns = e.target.parentElement.querySelectorAll('.tab-btn');
+  allBtns.forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  const section = e.target.closest('section');
+  section.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  const target = document.getElementById('tab-' + id);
+  if(target) target.classList.add('active');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('load', () => {
+  // Initial regression based on 30 samples
+  updateRegressionPanel();
+  drawScatter();
+
+  // Nav active state
+  const sections  = document.querySelectorAll('section[id]');
+  const navLinks  = document.querySelectorAll('nav a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if(en.isIntersecting) {
+        navLinks.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + en.target.id);
+        });
+      }
+    });
+  }, { threshold: 0.35 });
+  sections.forEach(s => obs.observe(s));
+});
+
+window.addEventListener('resize', drawScatter);
+</script>
+</body>
+</html>
